@@ -1,2 +1,2 @@
-# react-crud-todo
+# react-todo-app
 Created with CodeSandbox
