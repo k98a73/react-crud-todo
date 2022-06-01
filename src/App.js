@@ -7,7 +7,15 @@ export default function App() {
 
   return (
     <div className="App">
-      <h1>Todo App</h1>
+      <form>
+        <input name="todo" type="text" placeholder="Create a new todo" />
+      </form>
+
+      <ul className="todo-list">
+        {todos.map((todo) => {
+          <li>{todo}</li>;
+        })}
+      </ul>
     </div>
   );
 }
