@@ -1,9 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./styles.css";
 
 export default function App() {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState(() => {
+    const savedTodos = localStorage.getItem("todos");
+    if (savedTodos) {
+      return JSON.parse(savedTodos);
+    } else {
+      return [];
+    }
+  });
   const [todo, setTodo] = useState("");
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todo]);
 
   function handleInputChange(e) {
     setTodo(e.target.value);
@@ -20,7 +31,7 @@ export default function App() {
 
   return (
     <div className="App">
-      <form on onSubmit={handleFormSubmit}>
+      <form onSubmit={handleFormSubmit}>
         <input
           name="todo"
           type="text"
