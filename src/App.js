@@ -1,4 +1,7 @@
 import { useState, useEffect } from "react";
+import TodoItem from "./TodoItem";
+import AddTodoForm from "./AddTodoForm";
+import EditForm from "./EditForm";
 import "./styles.css";
 
 export default function App() {
@@ -18,7 +21,7 @@ export default function App() {
     localStorage.setItem("todos", JSON.stringify(todos));
   }, [todos]);
 
-  function handleInputChange(e) {
+  function handleAddInputChange(e) {
     setTodo(e.target.value);
   }
 
@@ -26,11 +29,11 @@ export default function App() {
     setCurrentTodo({ ...currentTodo, text: e.target.value });
   }
 
-  function handleFormSubmit(e) {
+  function handleAddFormSubmit(e) {
     e.preventDefault();
 
     if (todo !== "") {
-      setTodos([...todos, { id: todos.length + 1, text: todo.trim() }]);
+      setTodos([...todos, { id: new Date(), text: todo.trim() }]);
     }
     setTodo("");
   }
@@ -64,41 +67,27 @@ export default function App() {
   return (
     <div className="App">
       {isEditing ? (
-        <form onSubmit={handleEditFormSubmit}>
-          <h2>Edit Todo</h2>
-          <label htmlFor="editTodo">Edit todo: </label>
-          <input
-            name="ediTodo"
-            type="text"
-            placeholder="Edit todo"
-            value={currentTodo.text}
-            onChange={handleEditInputChange}
-          />
-          <button type="submit">Update</button>
-          <button onClick={() => setIsEditing(false)}>Cansel</button>
-        </form>
+        <EditForm
+          currentTodo={currentTodo}
+          setIsEditing={setIsEditing}
+          onEditInputChange={handleEditInputChange}
+          onEditFormSubmit={handleEditFormSubmit}
+        />
       ) : (
-        <form onSubmit={handleFormSubmit}>
-          <h2>Add Todo</h2>
-          <label htmlFor="todo">Add todo: </label>
-          <input
-            name="todo"
-            type="text"
-            placeholder="Create a new todo"
-            value={todo}
-            onChange={handleInputChange}
-          />
-          <button type="submit">Add</button>
-        </form>
+        <AddTodoForm
+          todo={todo}
+          onAddInputChange={handleAddInputChange}
+          onAddFormSubmit={handleAddFormSubmit}
+        />
       )}
 
       <ul className="todo-list">
         {todos.map((todo) => (
-          <li key={todo.id}>
-            {todo.text}
-            <button onClick={() => handleEditClick(todo)}>Edit</button>
-            <button onClick={() => handleDeleteClick(todo.id)}>Delete</button>
-          </li>
+          <TodoItem
+            todo={todo}
+            onEditClick={handleEditClick}
+            onDeleteClick={handleDeleteClick}
+          />
         ))}
       </ul>
     </div>
