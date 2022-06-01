@@ -14,7 +14,7 @@ export default function App() {
 
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todos));
-  }, [todo]);
+  }, [todos]);
 
   function handleInputChange(e) {
     setTodo(e.target.value);
@@ -27,6 +27,13 @@ export default function App() {
       setTodos([...todos, { id: todos.length + 1, text: todo.trim() }]);
     }
     setTodo("");
+  }
+
+  function handleDeleteClick(id) {
+    const removeItem = todos.filter((todo) => {
+      return todo.id !== id;
+    });
+    setTodos(removeItem);
   }
 
   return (
@@ -43,7 +50,10 @@ export default function App() {
 
       <ul className="todo-list">
         {todos.map((todo) => (
-          <li key={todo.id}>{todo.text}</li>
+          <li key={todo.id}>
+            {todo.text}
+            <button onClick={() => handleDeleteClick(todo.id)}>X</button>
+          </li>
         ))}
       </ul>
     </div>
